@@ -34,3 +34,5 @@ resource "aws_iam_role" "github_role" {
   name               = "GithubActionsRole"
   assume_role_policy = data.aws_iam_policy_document.github_allow.json
 }
+
+
