@@ -14,5 +14,5 @@ provider "aws" {
 #}
 
 module identity_provider {
-  
+  source = "./identity_provider"
 }
