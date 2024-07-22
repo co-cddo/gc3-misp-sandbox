@@ -1,6 +1,4 @@
 terraform {
-var tfstate_bucket = "gccc-misp-tfstate"
-
   backend "s3" {
     bucket = "gccc-misp-tfstate"
     key    = "aws_dynamodb_table.hash_key"
