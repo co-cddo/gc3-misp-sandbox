@@ -12,3 +12,7 @@ provider "aws" {
 #    region = "eu-west-2"
 #  }
 #}
+
+module identity_provider {
+  
+}
