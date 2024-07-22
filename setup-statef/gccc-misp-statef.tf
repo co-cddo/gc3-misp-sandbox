@@ -27,14 +27,14 @@ resource "aws_dynamodb_table" "lock" {
 #---------------------------------------------------------------------------------------------------
 # Bucket Policies
 #---------------------------------------------------------------------------------------------------
-data "aws_iam_policy_document" "state_force_ssl" {
+data "aws_iam_policy_document" "tfstate_force_ssl" {
   statement {
     sid     = "AllowSSLRequestsOnly"
     actions = ["s3:*"]
     effect  = "Deny"
     resources = [
-      aws_s3_bucket.state.arn,
-      "${aws_s3_bucket.state.arn}/*"
+      aws_s3_bucket.tfstate.arn,
+      "${aws_s3_bucket.tfstate.arn}/*"
     ]
     condition {
       test     = "Bool"
@@ -53,13 +53,13 @@ data "aws_iam_policy_document" "state_force_ssl" {
 #---------------------------------------------------------------------------------------------------
 resource "aws_s3_bucket_policy" "tfstate_force_ssl" {
   bucket     = aws_s3_bucket.tfstate.id
-  policy     = data.aws_iam_policy_document.state_force_ssl.json
-  depends_on = [aws_s3_bucket_public_access_block.state]
+  policy     = data.aws_iam_policy_document.tfstate_force_ssl.json
+  depends_on = [aws_s3_bucket_public_access_block.tfstate]
 }
 resource "aws_s3_bucket" "tfstate" {
   bucket        = var.tfstate_bucket
   force_destroy = var.s3_bucket_force_destroy
-  tags          = var.tags
+  tags          = var.default_tags
 }
 resource "aws_s3_bucket_ownership_controls" "tfstate" {
   bucket = aws_s3_bucket.tfstate.id
