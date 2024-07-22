@@ -4,8 +4,8 @@ variable "default_tags" {
 }
 
 variable "tfstate_bucket" {
-    type  = string
-    value = "gccc-misp-tfstate"
+    type    = string
+    default = "gccc-misp-tfstate"
 }
 
 variable "dynamodb_table_name" {
