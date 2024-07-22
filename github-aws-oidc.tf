@@ -21,13 +21,17 @@ data "aws_iam_policy_document" "github_allow" {
    }
    condition {
      test     = "StringLike"
- variable = "token.actions.githubusercontent.com:sub"
+     variable = "token.actions.githubusercontent.com:sub"
      values   = ["repo:${GitHubOrg}/${GitHubRepo}:*"]
-
+   }
+   condition {
+     test     = "StringEquals"
+     variable = "token.actions.githubusercontent.com:aud"
+     values   = "sts.amazonaws.com"
    }
  }
 }
- resource "aws_iam_role" "github_role" {
- name               = "GithubActionsRole"
- assume_role_policy = data.aws_iam_policy_document.github_allow.json
+resource "aws_iam_role" "github_role" {
+  name               = "GithubActionsRole"
+  assume_role_policy = data.aws_iam_policy_document.github_allow.json
 }
