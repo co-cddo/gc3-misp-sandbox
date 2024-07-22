@@ -1,11 +1,9 @@
 resource "aws_iam_openid_connect_provider" "githubOidc" {
  url = "https://token.actions.githubusercontent.com"
-
  client_id_list = [
    "sts.amazonaws.com"
  ]
-
- thumbprint_list = ["a031c46782e6e6c662c2c87c76da9aa62ccabd8e"]
+ thumbprint_list = ["1c58a3a8518e8759bf075b76b750d4f2df264fcd","6938fd4d98bab03faadb97b34396831e3780aea1"]
 }
 
 #
@@ -22,12 +20,13 @@ data "aws_iam_policy_document" "github_allow" {
    condition {
      test     = "StringLike"
      variable = "token.actions.githubusercontent.com:sub"
-     values   = ["repo:${GitHubOrg}/${GitHubRepo}:*"]
+#    values   = ["repo:${GitHubOrg}/${GitHubRepo}:*"]
+     values   = ["repo:co-cddo/gc3-misp-sandbox:*"]
    }
    condition {
      test     = "StringEquals"
      variable = "token.actions.githubusercontent.com:aud"
-     values   = "sts.amazonaws.com"
+     values   = ["sts.amazonaws.com"]
    }
  }
 }
