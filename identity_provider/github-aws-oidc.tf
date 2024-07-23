@@ -1,8 +1,5 @@
 provider "aws" {
-  region = var.region
-  default_tags {
-    tags = var.default_tags
-  }
+  region = "eu-west-2"
 }
 
 terraform {
