@@ -25,10 +25,6 @@ data "terraform_remote_state" "statefile" {
 #  source = "./identity_provider"
 #}
 
-provider "aws" {
-  region = local.region
-}
-
 data "aws_availability_zones" "available" {}
 
 locals {
@@ -52,7 +48,7 @@ locals {
 ################################################################################
 
 module "ecs_cluster" {
-  source = "../../modules/cluster"
+  source = "./modules/cluster"
 
   cluster_name = local.name
 
@@ -79,7 +75,7 @@ module "ecs_cluster" {
 ################################################################################
 
 module "ecs_service" {
-  source = "../../modules/service"
+  source = "./modules/service"
 
   name        = local.name
   cluster_arn = module.ecs_cluster.arn
@@ -208,7 +204,7 @@ module "ecs_service" {
 ################################################################################
 
 module "ecs_task_definition" {
-  source = "../../modules/service"
+  source = "./modules/service"
 
   # Service
   name        = "${local.name}-standalone"
