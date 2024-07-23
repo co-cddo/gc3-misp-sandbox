@@ -1,3 +1,19 @@
+provider "aws" {
+  region = var.region
+  default_tags {
+    tags = var.default_tags
+  }
+}
+
+data "terraform_remote_state" "statefile" {
+  backend = "s3"
+  config = {
+    bucket         = "gccc-misp-tfstate"
+    key            = "aws_dynamodb_table.hash_key"
+    dynamodb_table = "gccc-misp-tfstate-table"
+  }
+}
+
 resource "aws_iam_openid_connect_provider" "githubOidc" {
  url = "https://token.actions.githubusercontent.com"
  client_id_list = [
