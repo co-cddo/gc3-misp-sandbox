@@ -5,6 +5,16 @@ provider "aws" {
   }
 }
 
+terraform {
+  backend "s3" {
+    bucket         = "gccc-misp-tfstate"
+    key            = "misp.hash_key"
+    dynamodb_table = "gccc-misp-tfstate-table"
+    encrypt        = true
+    region         = "eu-west-2"
+  }
+}
+
 data "terraform_remote_state" "statefile" {
   backend = "s3"
   config = {
