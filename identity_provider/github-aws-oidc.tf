@@ -1,5 +1,8 @@
 provider "aws" {
   region = "eu-west-2"
+  default_tags {
+    tags = var.default_tags
+  }
 }
 #
 # This section ensures that terraform will attempt to store state file in aws s3 with locking managed by the use of DynamoDB table entries. 
