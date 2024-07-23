@@ -1,7 +1,9 @@
 provider "aws" {
   region = "eu-west-2"
 }
-
+#
+# This section ensures that terraform will attempt to store state file in aws s3 with locking managed by the use of DynamoDB table entries. 
+#
 terraform {
   backend "s3" {
     bucket         = "gccc-misp-tfstate"
@@ -12,6 +14,9 @@ terraform {
   }
 }
 
+#
+# This section will import the state file created when the bucket and dynamodb state file management was created 
+#
 data "terraform_remote_state" "statefile" {
   backend = "s3"
   config = {
@@ -21,6 +26,10 @@ data "terraform_remote_state" "statefile" {
   }
 }
 
+#
+# These commands will create the AWS IAM Identity Provider which will allow github (url) to connect using the oidc infoirmation identiti=ed by the two thumbprints.
+# Note that these thumbprints have been known to change so if issues occurr this would be a good place to look.
+#
 resource "aws_iam_openid_connect_provider" "githubOidc" {
  url = "https://token.actions.githubusercontent.com"
  client_id_list = [
@@ -30,7 +39,8 @@ resource "aws_iam_openid_connect_provider" "githubOidc" {
 }
 
 #
-# Add the role that will allow the githubv user to connect and run the actions.
+# Add the role that will allow the github user to connect from the repopsitory/branch and run the actions.
+# This will need changing to modify the branch name for dev / test and production.
 #
 data "aws_iam_policy_document" "github_allow" {
  statement {
