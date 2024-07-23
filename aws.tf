@@ -5,7 +5,15 @@ provider "aws" {
   }
 }
 
-#
+data "terraform_remote_state" "statefile" {
+  backend = "s3"
+  config = {
+    bucket         = "gccc-misp-tfstate"
+    key            = "aws_dynamodb_table.hash_key"
+    dynamodb_table = "gccc-misp-tfstate-table"
+  }
+}
+#  
 # This module was going to be called to create the AWS IAM Identity Provider to be used by githiub for builds 
 # but as I do not have the priv to create theidentity provider or the required roles I can't use it and will have 
 # to have it by someone else.check 
