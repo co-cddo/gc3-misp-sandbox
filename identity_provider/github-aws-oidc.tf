@@ -8,8 +8,8 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket         = "gccc-misp-tfstate"
-    key            = "misp.hash_key"
-    dynamodb_table = "gccc-misp-tfstate-table"
+    key            = "aws_dynamodb_table.hash_key"
+    dynamodb_table = "gccc-misp-identity-table"
     encrypt        = true
     region         = "eu-west-2"
   }
