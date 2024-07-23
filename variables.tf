@@ -3,13 +3,7 @@ variable "default_tags" {
     description = "Set of default tags"
 }
 
-variable "tfstate_bucket" {
+variable "region" {
     type    = string
-    default = "gccc-misp-tfstate"
-}
-
-variable "dynamodb_table_name" {
-  description = "The name of the DynamoDB table to use for state locking."
-  type        = string
-  default     = "gccc-misp-tfstate-table"
+    default = "eu-west-2"
 }
