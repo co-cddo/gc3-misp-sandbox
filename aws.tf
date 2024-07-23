@@ -45,7 +45,7 @@ locals {
 }
 
 ################################################################################
-# Cluster
+# ECS Cluster
 ################################################################################
 
 module "ecs_cluster" {
@@ -71,12 +71,10 @@ module "ecs_cluster" {
 }
 
 ################################################################################
-# Service
+# ECS Service
 ################################################################################
-
 module "ecs_service" {
   source = "./modules/service"
-
   name        = local.name
   cluster_arn = module.ecs_cluster.arn
 
@@ -88,7 +86,6 @@ module "ecs_service" {
 
   # Container definition(s)
   container_definitions = {
-
     fluent-bit = {
       cpu       = 512
       memory    = 1024
@@ -167,7 +164,7 @@ module "ecs_service" {
 
   load_balancer = {
     service = {
-      target_group_arn = module.alb.target_groups["ex_ecs"].arn
+      target_group_arn = module.alb.target_groups["misp_ecs"].arn
       container_name   = local.container_name
       container_port   = local.container_port
     }
@@ -198,9 +195,8 @@ module "ecs_service" {
 }
 
 ################################################################################
-# Standalone Task Definition (w/o Service)
+# ECS mStandalone Task Definition (w/o Service)
 ################################################################################
-
 module "ecs_task_definition" {
   source = "./modules/service"
 
@@ -222,14 +218,12 @@ module "ecs_task_definition" {
   container_definitions = {
     al2023 = {
       image = "public.ecr.aws/amazonlinux/amazonlinux:2023-minimal"
-
       mount_points = [
         {
           sourceVolume  = "ex-vol",
           containerPath = "/var/www/ex-vol"
         }
       ]
-
       command    = ["echo hello world"]
       entrypoint = ["/usr/bin/sh", "-c"]
     }
@@ -297,13 +291,13 @@ module "alb" {
       protocol = "HTTP"
 
       forward = {
-        target_group_key = "ex_ecs"
+        target_group_key = "misp_ecs"
       }
     }
   }
 
   target_groups = {
-    ex_ecs = {
+    misp_ecs = {
       backend_protocol                  = "HTTP"
       backend_port                      = local.container_port
       target_type                       = "ip"
