@@ -67,7 +67,6 @@ module "ecs_cluster" {
     }
   }
 
-  tags = local.tags
 }
 
 ################################################################################
@@ -195,8 +194,6 @@ module "ecs_service" {
   service_tags = {
     "ServiceTag" = "Tag on service level"
   }
-
-  tags = local.tags
 }
 
 ################################################################################
@@ -248,8 +245,6 @@ module "ecs_task_definition" {
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
-
-  tags = local.tags
 }
 
 ################################################################################
@@ -263,7 +258,6 @@ data "aws_ssm_parameter" "fluentbit" {
 resource "aws_service_discovery_http_namespace" "this" {
   name        = local.name
   description = "CloudMap namespace for ${local.name}"
-  tags        = local.tags
 }
 
 module "alb" {
@@ -332,8 +326,6 @@ module "alb" {
       create_attachment = false
     }
   }
-
-  tags = local.tags
 }
 
 module "vpc" {
@@ -349,6 +341,4 @@ module "vpc" {
 
   enable_nat_gateway = true
   single_nat_gateway = true
-
-  tags = local.tags
 }
