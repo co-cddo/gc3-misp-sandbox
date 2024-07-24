@@ -8,6 +8,11 @@ variable "region" {
     default = "eu-west-2"
 }
 
+variable "environment" {
+    type = string
+    default = "sandbox"
+}
+
 variable "tfstate_bucket" {
     type    = string
     default = "gccc-misp-tfstate"

@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "gccc-misp-tfstate"
+    bucket         = "gccc-misp-sandbox-tfstate"
     key            = "misp.hash_key"
     dynamodb_table = "gccc-misp-tfstate-table"
     encrypt        = true

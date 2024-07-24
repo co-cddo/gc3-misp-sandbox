@@ -8,7 +8,7 @@ provider "aws" {
 data "terraform_remote_state" "statefile" {
   backend = "s3"
   config = {
-    bucket         = "gccc-misp-tfstate"
+    bucket         = "gccc-misp-${var.environment}-tfstate"
     key            = "aws_dynamodb_table.hash_key"
     dynamodb_table = "gccc-misp-tfstate-table"
   }
