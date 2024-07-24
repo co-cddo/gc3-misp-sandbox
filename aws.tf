@@ -5,11 +5,20 @@ provider "aws" {
   }
 }
 
-data "terraform_remote_state" "statefile" {
+data "terraform_remote_state" "stetefiles-statefile" {
   backend = "s3"
   config = {
     bucket         = "gccc-misp-${var.environment}-tfstate"
     key            = "aws_dynamodb_table.hash_key"
+    dynamodb_table = "gccc-misp-tfstate-table"
+  }
+}
+
+data "terraform_remote_state" "identity-statefile" {
+  backend = "s3"
+  config = {
+    bucket         = "gccc-misp-${var.environment}-tfstate"
+    key            = "aws_identity.hash_key"
     dynamodb_table = "gccc-misp-tfstate-table"
   }
 }
@@ -24,6 +33,10 @@ data "terraform_remote_state" "statefile" {
 #  source = "./identity_provider"
 #}
 
-module create_ecr {
+module misp-ecr {
   source = "./misp-ecr"
 }
+
+#module misp-fargate {
+#  source = "./misp-fargate"
+#}

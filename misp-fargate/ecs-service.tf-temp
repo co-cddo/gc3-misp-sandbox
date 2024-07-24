@@ -48,7 +48,7 @@ module "ecs_cluster" {
 # ECS Service
 ################################################################################
 module "ecs_service" {
-  source = "./modules/service"
+  source = "../modules/service"
   name        = local.name
   cluster_arn = module.ecs_cluster.arn
 

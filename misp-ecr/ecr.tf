@@ -3,5 +3,5 @@ resource "aws_ecr_repository" "misp_repository" {
 }
 
 output "repository_url" {
-    value = aws_ecr_repository.misp_repository.repository_utl
+    value = aws_ecr_repository.misp_repository.repository_url
 }
