@@ -37,6 +37,11 @@ module misp-ecr {
   source = "./misp-ecr"
 }
 
+module misp-container {
+  source = "./misp-container"
+  ecr_url = module.misp-ecr.repository_url
+}
+
 #module misp-fargate {
 #  source = "./misp-fargate"
 #}
