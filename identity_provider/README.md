@@ -1,8 +1,11 @@
 # gc3-misp-sandbox
 
+Before proceeding ensure the instructions in the parent folder to setup the statefile management has been completed.
+
 This folder contains the code needed to create the AWS IAM Identity provider and role to be used by GitHub for secure access when performing github actions to modify the container and/or infrastructure.
 
-This was hastilly added due to permission and time requirements.
+OIDC Setup is documented by AWS here
+https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
 
 The code :
 
@@ -15,6 +18,13 @@ Note that these thumbprints have been known to change so if issues occurr this w
 
 Add the role that will allow the github user to connect from the repopsitory/branch and run the actions.
 This will need changing to modify the branch name for dev / test and production.
+
+To build:
+
+cd identity-provider
+terraform init
+terraform plan
+terraform apply
 
 
 
