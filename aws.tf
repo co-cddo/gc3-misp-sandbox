@@ -34,11 +34,11 @@ data "terraform_remote_state" "identity-statefile" {
 #}
 
 module misp-ecr {
-  source = "./misp-ecr"
+  source = "./modules/misp-ecr"
 }
 
 module misp-container {
-  source = "./misp-container"
+  source = "./modules/misp-container"
   ecr_url = module.misp-ecr.repository_url
 }
 
