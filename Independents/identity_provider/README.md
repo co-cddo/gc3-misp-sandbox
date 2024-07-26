@@ -21,7 +21,7 @@ This will need changing to modify the branch name for dev / test and production.
 
 To build:
 
-cd identity-provider
+cd Independents/identity-provider
 terraform init
 terraform plan
 terraform apply

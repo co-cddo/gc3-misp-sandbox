@@ -1,20 +1,13 @@
+#
+# Sourced from github terraform-aws-modules (https://github.com/terraform-aws-modules) 
+#
 
 data "aws_availability_zones" "available" {}
 
 locals {
-  region = "eu-west-2"
-# name   = "misp-${basename(path.cwd)}"
-  name   = "misp"
-
-  vpc_cidr = "10.0.0.0/16"
-  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
-
-  container_name = "misp"
-  container_port = 3000
-
+  azs      = slice(data.aws_availability_zones.available.names, 0, var.numb_azs)
   tags = {
-    Name       = local.name
-    Example    = local.name
+    Name       = var.service_name
   }
 }
 
@@ -23,9 +16,9 @@ locals {
 ################################################################################
 
 module "ecs_cluster" {
-  source = "../modules/cluster"
+  source = "../aws/cluster"
 
-  cluster_name = local.name
+  cluster_name = var.cluster_name
 
   # Capacity provider
   fargate_capacity_providers = {
@@ -45,54 +38,6 @@ module "ecs_cluster" {
 }
 
 ################################################################################
-# ECS mStandalone Task Definition (w/o Service)
-################################################################################
-module "ecs_task_definition" {
-  source = "../modules/service"
-
-  # Service
-  name        = "${local.name}-standalone"
-  cluster_arn = module.ecs_cluster.arn
-
-  # Task Definition
-  volume = {
-    ex-vol = {}
-  }
-
-  runtime_platform = {
-    cpu_architecture        = "ARM64"
-    operating_system_family = "LINUX"
-  }
-
-  # Container definition(s)
-  container_definitions = {
-    al2023 = {
-      image = "public.ecr.aws/amazonlinux/amazonlinux:2023-minimal"
-      mount_points = [
-        {
-          sourceVolume  = "ex-vol",
-          containerPath = "/var/www/ex-vol"
-        }
-      ]
-      command    = ["echo hello world"]
-      entrypoint = ["/usr/bin/sh", "-c"]
-    }
-  }
-
-  subnet_ids = module.vpc.private_subnets
-
-  security_group_rules = {
-    egress_all = {
-      type        = "egress"
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-}
-
-################################################################################
 # Supporting Resources
 ################################################################################
 
@@ -101,15 +46,15 @@ data "aws_ssm_parameter" "fluentbit" {
 }
 
 resource "aws_service_discovery_http_namespace" "this" {
-  name        = local.name
-  description = "CloudMap namespace for ${local.name}"
+  name        = var.service_name
+  description = "CloudMap namespace for ${var.service_name}"
 }
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 9.0"
 
-  name = local.name
+  name = var.service_name
 
   load_balancer_type = "application"
 
@@ -149,7 +94,7 @@ module "alb" {
   target_groups = {
     misp_ecs = {
       backend_protocol                  = "HTTP"
-      backend_port                      = local.container_port
+      backend_port                      = var.container_port
       target_type                       = "ip"
       deregistration_delay              = 5
       load_balancing_cross_zone_enabled = true
@@ -177,12 +122,12 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 5.0"
 
-  name = local.name
-  cidr = local.vpc_cidr
+  name = var.service_name
+  cidr = var.vpc_cidr
 
   azs             = local.azs
-  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
-  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
+  private_subnets = [for k, v in local.azs : cidrsubnet(var.vpc_cidr, 4, k)]
+  public_subnets  = [for k, v in local.azs : cidrsubnet(var.vpc_cidr, 8, k + 48)]
 
   enable_nat_gateway = true
   single_nat_gateway = true

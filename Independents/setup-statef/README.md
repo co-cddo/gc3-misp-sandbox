@@ -4,7 +4,7 @@ MISP
 ### 1 To create the state file management used by these procedures:
 
 # Initialise the statefile management
-cd setup-statef
+cd Independents/setup-statef
 mv Now_move_statef.tf Now_move_statef.tf-saved
 terraform init
 terraform plan
