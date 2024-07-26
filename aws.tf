@@ -35,6 +35,19 @@ data "terraform_remote_state" "identity-statefile" {
 
 module misp-ecr {
   source = "./modules/misp-ecr"
+  ecr_name = "misp"
+}
+module misp-modules-ecr {
+  source = "./modules/misp-ecr"
+  ecr_name = "misp-modules"
+}
+module misp-mariadb-ecr {
+  source = "./modules/misp-ecr"
+  ecr_name = "mariadb"
+}
+module misp-redis-ecr {
+  source = "./modules/misp-ecr"
+  ecr_name = "redis"
 }
 
 module misp-fargate {
@@ -49,7 +62,7 @@ module misp-fargate {
   default_tags = var.default_tags
 }
 
-#module misp-container {
-#  ecr_url = module.misp-ecr.repository_url
-#  source = "./modules/misp-container"
-#}
+module misp-container {
+  ecr_url = module.misp-ecr.repository_url
+  source = "./modules/misp-container"
+}

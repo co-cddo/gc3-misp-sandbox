@@ -19,7 +19,7 @@ data "aws_ecr_authorization_token" "auth" {}
 #  password = data.aws_ecr_authorization_token.auth.password
 #}
 
-resource "null_resource" "docker_build2" {
+resource "null_resource" "docker_build" {
   triggers = {
     uuid = uuid()
   }
@@ -29,29 +29,42 @@ resource "null_resource" "docker_build2" {
     curl https://raw.githubusercontent.com/NUKIB/misp/main/docker-compose.yml -o docker-compose.yml
     docker-compose -f docker-compose.yml -p misp-project create
     docker image ls
-    docker tag ghcr.io/nukib/misp:latest         891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp:latest
-    docker tag ghcr.io/nukib/misp-modules:latest 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/misp-modules:latest
-    docker tag mariadb:latest                    891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/mariadb:latest
-    docker tag redis:latest                      891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/redis:latest
+#    docker tag ghcr.io/nukib/misp:latest         891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp:latest
+#    docker tag ghcr.io/nukib/misp-modules:latest 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/misp-modules:latest
+#    docker tag mariadb:latest                    891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/mariadb:latest
+#    docker tag redis:latest                      891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/redis:latest
     aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 891377055542.dkr.ecr.eu-west-2.amazonaws.com
+#    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp:latest
+#    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/misp-modules:latest
+#    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/mariadb:latest
+#    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/redis:latest
+##    docker image tag "ghcr.io/nukib/misp:latest" "ghcr.io/nukib/misp:latest"
+##    docker image push ${var.ecr_url}:ghcr.io/nukib/misp:latest
+##    docker push ${var.ecr_url}:latest
+##    docker tag misp:latest  ${var.ecr_url}:latest
+
+    docker tag "ghcr.io/nukib/misp":latest        891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp:latest
+    docker tag ghcr.io/nukib/misp-modules:latest 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp-modules:latest
+    docker tag mariadb:11.4                      891377055542.dkr.ecr.eu-west-2.amazonaws.com/mariadb:latest
+    docker tag redis:7.2                         891377055542.dkr.ecr.eu-west-2.amazonaws.com/redis:latest
     docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp:latest
-    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/misp-modules:latest
-    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/mariadb:latest
-    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp/redis:latest
-#    docker image tag "ghcr.io/nukib/misp:latest" "ghcr.io/nukib/misp:latest"
-#    docker image push ${var.ecr_url}:ghcr.io/nukib/misp:latest
-#    docker push ${var.ecr_url}:latest
-#    docker tag misp:latest  ${var.ecr_url}:latest
-    EOT
+    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp-modules:latest
+    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/mariadb:latest
+    docker push 891377055542.dkr.ecr.eu-west-2.amazonaws.com/redis:latest
+#    docker buildx imagetools create -t 891377055542.dkr.ecr.eu-west-2.amazonaws.com/misp:latest mariadb:latest redis:latest ghcr.io/nukib/misp:latest ghcr.io/nukib/misp-modules:latest
+###      Create a manifest list and push it
+###      docker manifest create --insecure ${var.ecr_url}:latest ${var.ecr_url}/misp-modules:latest ${var.ecr_url}/mariadb:latest ${var.ecr_url}/redis:latest
+#      docker manifest push ${var.ecr_url}:latest
+     EOT
   }
-# depends_on = [aws_ecr_repository.my_repo]
+## depends_on = [aws_ecr_repository.my_repo]
 }
 
-resource "docker_image" "misp" {
-  name          = "${var.ecr_url}:latest"
-  keep_locally  = false
-  pull_triggers = ["${data.aws_ecr_authorization_token.auth.proxy_endpoint}"]
-}
+#resource "docker_image" "misp" {
+#  name          = "${var.ecr_url}:latest"
+#  keep_locally  = false
+#  pull_triggers = ["${data.aws_ecr_authorization_token.auth.proxy_endpoint}"]
+#}
 
 #resource "docker_container" "misp" {
 #  image   = docker_image.misp.latest

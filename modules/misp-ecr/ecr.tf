@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "misp_repository" {
-    name = "misp"
+    name = var.ecr_name
 }
 
 output "repository_url" {
