@@ -37,11 +37,19 @@ module misp-ecr {
   source = "./modules/misp-ecr"
 }
 
-module misp-container {
-  source = "./modules/misp-container"
-  ecr_url = module.misp-ecr.repository_url
+module misp-fargate {
+  source = "./modules/misp-fargate"
+  cluster_name = "misp"
+  service_name = "misp"
+  region = var.region
+  vpc_cidr = "10.0.0.0/16"
+  numb_azs = 3
+  container_name = "misp"
+  container_port = "80"
+  default_tags = var.default_tags
 }
 
-#module misp-fargate {
-#  source = "./misp-fargate"
+#module misp-container {
+#  ecr_url = module.misp-ecr.repository_url
+#  source = "./modules/misp-container"
 #}
