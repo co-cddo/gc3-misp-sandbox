@@ -15,8 +15,10 @@ jobs:
   S3PackageUpload:
     runs-on: ubuntu-latest
     steps:
-#      - name: Git clone the repository
-#        uses: actions/checkout@v4
+      - name: Git clone the repository
+        uses: actions/checkout@v4
+        with:
+          ref: dev-single-script
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
@@ -24,6 +26,7 @@ jobs:
           role-session-name: samplerolesession
           aws-region: ${{ env.AWS_REGION }}
       # list AWS s3
-      - name:  list s3
+      - name:  terraform apply
         run: |
-          aws s3 ls s3://${{ env.BUCKET_NAME }}/
+          terraform init
+          terraform apply
