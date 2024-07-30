@@ -4,7 +4,7 @@ name: AWS example workflow
 on:
   push:
     branches:
-      - test:
+      - main:
   BUCKET_NAME : "gccc-misp-sandbox-tfstate"
   AWS_REGION : "eu-west-2"
 # permission can be added at job level or workflow level
