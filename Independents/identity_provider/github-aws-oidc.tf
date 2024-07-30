@@ -66,7 +66,44 @@ data "aws_iam_policy_document" "github_allow" {
    }
  }
 }
+
 resource "aws_iam_role" "github_role" {
   name               = "GithubActionsRole"
   assume_role_policy = data.aws_iam_policy_document.github_allow.json
+}
+
+#
+# The following create the policy role ecsTaskExecutionRole role necessary for Fargate 
+# We also add the following policies:
+# 
+#
+# Create an IAM Policy with the necessary permissions
+resource "aws_iam_policy" "github_role_policy_mgmt" {
+  name        = "RoleManagementPolicy"
+  description = "Policy to allow role creation and management"
+  policy      = jsonencode({
+    Version = "2012-10-17",
+    Statement: [
+      {
+        Effect: "Allow",
+        Action: [
+          "iam:CreateRole",
+          "iam:AttachRolePolicy",
+          "iam:PutRolePolicy",
+          "iam:PassRole",
+          "iam:ListRolePolicies",
+          "iam:ListAttachedRolePolicies",
+          "iam:GetRole",
+          "iam:GetRolePolicy"
+        ],
+        Resource: "*"
+      }
+    ]
+  })
+}
+
+# Attach the necessary policy to the role
+resource "aws_iam_role_policy_attachment" "github_role_mgmt_policy_attachment" {
+  role       = aws_iam_role.github_role.name
+  policy_arn = aws_iam_policy.github_role_policy_mgmt.arn
 }
