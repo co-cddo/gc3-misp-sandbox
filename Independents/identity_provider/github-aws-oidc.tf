@@ -107,3 +107,38 @@ resource "aws_iam_role_policy_attachment" "github_role_mgmt_policy_attachment" {
   role       = aws_iam_role.github_role.name
   policy_arn = aws_iam_policy.github_role_policy_mgmt.arn
 }
+
+#
+# Now attach a policy to S3 so that the github actions can update the state files.
+#
+resource "aws_iam_policy" "statef_bucket_policy" {
+  name        = "statef-bucket-policy"
+  path        = "/"
+  description = "Allow "
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "VisualEditor0",
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:DeleteObject"
+        ],
+        "Resource" : [
+          "arn:aws:s3:::*/*",
+          "arn:aws:s3:::gccc-misp-sandbox-tfstate"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "statef_bucket_policy" {
+  role       = aws_iam_role.github_role.name
+  policy_arn = aws_iam_policy.statef_bucket_policy.arn
+}
+
