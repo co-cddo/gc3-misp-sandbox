@@ -12,10 +12,14 @@ resource "aws_ecs_task_definition" "task_definition" {
   family                   = "phhmisp-family"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "512"
-  memory                   = "2048"
+  cpu                      = "1024"
+  memory                   = "3072"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  task_role_arn            = aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
+  runtime_platform {
+    cpu_architecture = "X86_64"
+    operating_system_family = "LINUX" 
+  }
   container_definitions = jsonencode([
     {
       name      = "mysql",
@@ -30,10 +34,10 @@ resource "aws_ecs_task_definition" "task_definition" {
         { name = "MYSQL_ROOT_PASSWORD", value = "password" }
       ],
       mountPoints = [
-        { sourceVolume = "mysql_data", containerPath = "/var/lib/mysql" }
+        { sourceVolume = "mysql_data", containerPath = "/var/lib/mysql", readOnly = false }
       ],
       portMappings = [
-        { containerPort = 3306, hostPort = 3306 }
+        { name = "mariadb-3306-tcp", containerPort = 3306, hostPort = 3306, protocol = "tcp", appProtocol = "http" }
       ],
       logConfiguration = {
         logDriver = "awslogs"
@@ -63,10 +67,10 @@ resource "aws_ecs_task_definition" "task_definition" {
       }
     },
     {
-      name  = "misp-modules",
+      name      = "misp-modules",
       image     = "ghcr.io/nukib/misp-modules:latest",
       essential = true,
-      capDrop   = ["NET_RAW", "SYS_CHROOT", "MKNOD", "NET_BIND_SERVICE", "AUDIT_WRITE", "SETFCAP"],
+#      capDrop   = ["NET_RAW", "SYS_CHROOT", "MKNOD", "NET_BIND_SERVICE", "AUDIT_WRITE", "SETFCAP"],
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -111,21 +115,31 @@ resource "aws_ecs_task_definition" "task_definition" {
         { name = "ECS_LOG_ENABLED", value = "yes" },
         { name = "MISP_DEBUG", value = "yes" }
       ],
+#      mountPoints = [
+#        { sourceVolume = "misp_logs", containerPath = "/var/www/MISP/app/tmp/logs/" },
+#        { sourceVolume = "misp_certs", containerPath = "/var/www/MISP/app/files/certs/" },
+#        { sourceVolume = "misp_attachments", containerPath = "/var/www/MISP/app/attachments/" },
+#        { sourceVolume = "misp_img_orgs", containerPath = "/var/www/MISP/app/files/img/orgs/" },
+#        { sourceVolume = "misp_img_custom", containerPath = "/var/www/MISP/app/files/img/custom/" },
+#        { sourceVolume = "misp_gnupg", containerPath = "/var/www/MISP/.gnupg/" }
+#      ],
       mountPoints = [
-        { sourceVolume = "misp_logs", containerPath = "/var/www/MISP/app/tmp/logs/" },
-        { sourceVolume = "misp_certs", containerPath = "/var/www/MISP/app/files/certs/" },
-        { sourceVolume = "misp_attachments", containerPath = "/var/www/MISP/app/attachments/" },
-        { sourceVolume = "misp_img_orgs", containerPath = "/var/www/MISP/app/files/img/orgs/" },
-        { sourceVolume = "misp_img_custom", containerPath = "/var/www/MISP/app/files/img/custom/" },
-        { sourceVolume = "misp_gnupg", containerPath = "/var/www/MISP/.gnupg/" }
+        { sourceVolume = "misp_logs", containerPath = "misp_logs" },
+        { sourceVolume = "misp_certs", containerPath = "mimsp_certs" },
+        { sourceVolume = "misp_attachments", containerPath = "misp_attachments" },
+        { sourceVolume = "misp_img_orgs", containerPath = "misp_img_orgs" },
+        { sourceVolume = "misp_img_custom", containerPath = "misp_img_custom" },
+        { sourceVolume = "misp_gnupg", containerPath = "misp_gnupg" }
       ],
       portMappings = [
-        { containerPort = 80, hostPort = 80 },
-        { containerPort = 8080, hostPort = 8080 },
-        { containerPort = 50000, hostPort = 50000 }
-      ],
-      capDrop = ["NET_RAW", "SYS_CHROOT", "MKNOD", "AUDIT_WRITE", "SETFCAP"]
+        { name = "phhmisp-80-tcp", containerPort = 80, hostPort = 80, protocol = "tcp", appProtocol = "http" },
+        { name = "phhmisp-8080-tcp", containerPort = 8080, hostPort = 8080, protocol = "tcp", appProtocol = "http"},
+        { name = "phhmisp-50000-tcp", containerPort = 50000, hostPort = 50000, protocol = "tcp", appProtocol = "http" }
+      ]
     }
+#      ],
+#      capDrop = ["NET_RAW", "SYS_CHROOT", "MKNOD", "AUDIT_WRITE", "SETFCAP"]
+#    }
   ])
   volume {
     name = "mysql_data"
@@ -184,7 +198,7 @@ resource "aws_ecs_service" "ecs_service" {
   task_definition     = aws_ecs_task_definition.task_definition.arn
   launch_type         = "FARGATE"
   scheduling_strategy = "REPLICA"
-  desired_count       = 1 # the number of tasks you wish to run
+  desired_count       = 0 # the number of tasks you wish to run
 
   network_configuration {
     subnets          = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_2.id]
@@ -199,4 +213,29 @@ resource "aws_ecs_service" "ecs_service" {
     container_port   = var.container_port
   }
   depends_on = [aws_lb_listener.listener]
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.phhmisp.arn
+  }
+
+}
+
+resource "aws_service_discovery_private_dns_namespace" "phhmisp" {
+  name        = "phhmisp.local"
+  vpc         = aws_vpc.vpc.id
+  description = "Private DNS namespace for the misp service"
+}
+
+resource "aws_service_discovery_service" "phhmisp" {
+  name = "phhmisp-ecs-service"
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.phhmisp.id
+    dns_records {
+      ttl  = 60
+      type = "A"
+    }
+  }
+  health_check_custom_config {
+    failure_threshold = 2
+  }
 }

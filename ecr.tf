@@ -47,8 +47,8 @@ locals {
 #This resource authenticates you to the ECR service
 resource "null_resource" "docker_login" {
   provisioner "local-exec" { command = local.docker_login_command }
-  triggers   = { "run_at" = timestamp() }
-#  depends_on = [aws_ecrpublic_repository.ecr]
+  triggers = { "run_at" = timestamp() }
+  #  depends_on = [aws_ecrpublic_repository.ecr]
 }
 
 ##This resource builds the docker image from the Dockerfile in the app folder

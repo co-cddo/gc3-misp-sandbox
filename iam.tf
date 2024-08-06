@@ -19,6 +19,23 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   ]
 }
 
+resource "aws_iam_role" "ecs_task_role" {
+  name = "misp_ecs_task_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ecs-tasks.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  ]
+}
+
 resource "aws_iam_policy" "ecs_task_cloudwatch_policy" {
   name        = "misp_ecs_task_cloudwatch_policy"
   description = "Policy for ECS task execution role"

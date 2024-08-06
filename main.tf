@@ -65,7 +65,9 @@ resource "aws_subnet" "public_subnet_2" {
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
-
+  tags = {
+    Name = "phhmisp-ROU-Pub"
+  }
 }
 
 resource "aws_route" "public" {
