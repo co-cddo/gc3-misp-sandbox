@@ -33,21 +33,21 @@ data "terraform_remote_state" "identity-statefile" {
 #  source = "./identity_provider"
 #}
 
-module "misp-ecr" {
-  source = "./modules/misp-ecr"
-}
-
-module "misp-fargate" {
-  source         = "./modules/misp-fargate"
-  cluster_name   = "misp"
-  service_name   = "misp"
-  region         = var.region
-  vpc_cidr       = "10.0.0.0/16"
-  numb_azs       = 3
-  container_name = "misp"
-  container_port = "80"
-  default_tags   = var.default_tags
-}
+#module "misp-ecr" {
+#  source = "./modules/misp-ecr"
+#}
+#
+#module "misp-fargate" {
+#  source         = "./modules/misp-fargate"
+#  cluster_name   = "misp"
+#  service_name   = "misp"
+#  region         = var.region
+#  vpc_cidr       = "10.0.0.0/16"
+#  numb_azs       = 3
+#  container_name = "misp"
+#  container_port = "80"
+#  default_tags   = var.default_tags
+#}
 
 #module misp-container {
 #  ecr_url = module.misp-ecr.repository_url
