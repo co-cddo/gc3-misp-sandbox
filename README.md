@@ -26,6 +26,8 @@ terraform apply
 
 ### 3 build the infrastructure
 
+Initially we have tried the Docker image focused on high performance and security based on CentOS Stream 8 maintained by National Cyber and Information Security Agency of the Czech Republic.
 
-
+Now we are trying the production ready docker images for MISP and MISP-modules maintained by Stefano Ortolani from VMware. 
+Images are regularly pushed to MISP GitHub Package registry (https://github.com/misp/misp-docker) and a blog post with step by step instruction is available at https://blogs.vmware.com/security/2023/01/how-to-deploy-a-threat-intelligence-platform-in-your-data-center.html
 
