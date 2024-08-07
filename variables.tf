@@ -3,6 +3,12 @@ variable "region" {
   type        = string
 }
 
+ variable "environment" {
+   description = "dev/test/prod etc"
+   type        = string
+   default     = "dev"
+}
+
 variable "vpc_cidr" {
   type        = string
   description = "CIDR block for the main VPC"
