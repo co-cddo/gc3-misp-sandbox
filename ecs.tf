@@ -68,8 +68,8 @@ resource "aws_ecs_task_definition" "task_definition" {
     },
     {
       name      = "misp-modules",
-      image     = "ghcr.io/misp/misp-docker/misp-modules:5ef80d3",
-#      image     = "ghcr.io/nukib/misp-modules:latest",
+#      image     = "ghcr.io/misp/misp-docker/misp-modules:5ef80d3",
+      image     = "ghcr.io/nukib/misp-modules:latest",
       essential = true,
       #      capDrop   = ["NET_RAW", "SYS_CHROOT", "MKNOD", "NET_BIND_SERVICE", "AUDIT_WRITE", "SETFCAP"],
       logConfiguration = {
@@ -84,8 +84,8 @@ resource "aws_ecs_task_definition" "task_definition" {
     },
     {
       name  = "misp",
-      image = "ghcr.io/misp/misp-docker/misp-core:5ef80d3",
-#      image = "ghcr.io/nukib/misp:latest",
+#      image = "ghcr.io/misp/misp-docker/misp-core:5ef80d3",
+      image = "ghcr.io/nukib/misp:latest",
       dependsOn = [
         { containerName = "mysql", condition = "START" },
         { containerName = "redis", condition = "START" }
