@@ -135,7 +135,7 @@ resource "aws_ecs_task_definition" "task_definition" {
       ],
       portMappings = [
         { name = "phhmisp-80-tcp", containerPort = 80, hostPort = 80, protocol = "tcp", appProtocol = "http" },
-        { name = "phhmisp-443-tcp", containerPort = 443, hostPort = 443, protocol = "tcp", appProtocol = "https" },
+        { name = "phhmisp-443-tcp", containerPort = 443, hostPort = 443, protocol = "tcp", appProtocol = "http" },
         { name = "phhmisp-8080-tcp", containerPort = 8080, hostPort = 8080, protocol = "tcp", appProtocol = "http" },
         { name = "phhmisp-50000-tcp", containerPort = 50000, hostPort = 50000, protocol = "tcp", appProtocol = "http" }
       ]
