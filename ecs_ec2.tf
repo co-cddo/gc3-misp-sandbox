@@ -87,8 +87,8 @@ resource "aws_ecs_task_definition" "task_definitionec2" {
       image = "ghcr.io/misp/misp-docker/misp-core:5ef80d3",
 #      image = "ghcr.io/nukib/misp:latest",
       dependsOn = [
-        { containerName = "mysql", condition = "START" },
-        { containerName = "redis", condition = "START" }
+        { containerName = "ec2mysql", condition = "START" },
+        { containerName = "ec2redis", condition = "START" }
       ],
       essential = true,
       logConfiguration = {
