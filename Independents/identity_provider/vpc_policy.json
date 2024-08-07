@@ -10,7 +10,7 @@
                 "iam:CreatePolicy",
                 "servicediscovery:CreateHttpNamespace",
                 "servicediscovery:CreatePrivateDnsNamespace",
-                "iam:TagPolicy"
+                "iam:TagPolicy",
                 "servicediscovery:TagResource",
                 "ssm:GetParameter"
             ],
