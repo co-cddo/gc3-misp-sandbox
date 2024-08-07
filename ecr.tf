@@ -15,7 +15,7 @@
 
 #This is the policy defining the rules for images in the repo
 locals {
-  account_id = "407026129471"
+  account_id = "891377055542"
   ecr_policy = jsonencode({
     "rules" : [
       {
@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "ecr_access_permission_policy" {
     effect = "Allow"
     principals {
       type        = "AWS"
-      identifiers = ["407026129471"]
+      identifiers = ["891377055542"]
     }
     actions = [
       "ecr:GetAuthorizationToken",
