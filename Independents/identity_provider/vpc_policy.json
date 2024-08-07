@@ -39,6 +39,10 @@
                 "ec2:DetachInternetGateway",
                 "ecr:ListTagsForResource",
                 "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeAddressesAttribute",
+                "ec2:DescribeVpcAttribute",
+                "ecr:GetAuthorizationToken",
+                "ecr:ListTagsForResource",
                 "ssm:GetParameter"
             ],
             "Resource": "*"
