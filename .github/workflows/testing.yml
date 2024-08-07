@@ -5,7 +5,7 @@ name: AWS example workflow
 on:
   push:
     branches:
-      - test
+      - 'test'
 env:
   BUCKET_NAME : "gccc-misp-sandbox-tfstate"
   AWS_REGION : "eu-west-2"
