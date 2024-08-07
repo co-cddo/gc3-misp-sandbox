@@ -9,6 +9,9 @@
                 "iam:TagRole",
                 "iam:CreatePolicy",
                 "servicediscovery:CreateHttpNamespace",
+                "servicediscovery:CreatePrivateDnsNamespace",
+                "iam:TagPolicy"
+                "servicediscovery:TagResource",
                 "ssm:GetParameter"
             ],
             "Resource": "*"
