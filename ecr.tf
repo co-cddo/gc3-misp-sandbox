@@ -51,6 +51,29 @@ resource "null_resource" "docker_login" {
   #  depends_on = [aws_ecrpublic_repository.ecr]
 }
 
+resource "aws_ecr_repository" "misp" {
+  name                 = "misp"
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+resource "aws_ecr_repository" "misp-modules" {
+  name                 = "misp-modules"
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+resource "aws_ecr_repository" "redis" {
+  name                 = "redis"
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}resource "aws_ecr_repository" "mariadb" {
+  name                 = "mariadb"
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
 ##This resource builds the docker image from the Dockerfile in the app folder
 #resource "null_resource" "docker_build" {
 #    provisioner "local-exec" { command     = local.docker_build_command }
