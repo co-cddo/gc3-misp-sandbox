@@ -17,8 +17,8 @@ resource "aws_ecs_task_definition" "task_definition" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   runtime_platform {
-    cpu_architecture = "X86_64"
-    operating_system_family = "LINUX" 
+    cpu_architecture        = "X86_64"
+    operating_system_family = "LINUX"
   }
   container_definitions = jsonencode([
     {
@@ -70,7 +70,7 @@ resource "aws_ecs_task_definition" "task_definition" {
       name      = "misp-modules",
       image     = "ghcr.io/nukib/misp-modules:latest",
       essential = true,
-#      capDrop   = ["NET_RAW", "SYS_CHROOT", "MKNOD", "NET_BIND_SERVICE", "AUDIT_WRITE", "SETFCAP"],
+      #      capDrop   = ["NET_RAW", "SYS_CHROOT", "MKNOD", "NET_BIND_SERVICE", "AUDIT_WRITE", "SETFCAP"],
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -115,14 +115,14 @@ resource "aws_ecs_task_definition" "task_definition" {
         { name = "ECS_LOG_ENABLED", value = "yes" },
         { name = "MISP_DEBUG", value = "yes" }
       ],
-#      mountPoints = [
-#        { sourceVolume = "misp_logs", containerPath = "/var/www/MISP/app/tmp/logs/" },
-#        { sourceVolume = "misp_certs", containerPath = "/var/www/MISP/app/files/certs/" },
-#        { sourceVolume = "misp_attachments", containerPath = "/var/www/MISP/app/attachments/" },
-#        { sourceVolume = "misp_img_orgs", containerPath = "/var/www/MISP/app/files/img/orgs/" },
-#        { sourceVolume = "misp_img_custom", containerPath = "/var/www/MISP/app/files/img/custom/" },
-#        { sourceVolume = "misp_gnupg", containerPath = "/var/www/MISP/.gnupg/" }
-#      ],
+      #      mountPoints = [
+      #        { sourceVolume = "misp_logs", containerPath = "/var/www/MISP/app/tmp/logs/" },
+      #        { sourceVolume = "misp_certs", containerPath = "/var/www/MISP/app/files/certs/" },
+      #        { sourceVolume = "misp_attachments", containerPath = "/var/www/MISP/app/attachments/" },
+      #        { sourceVolume = "misp_img_orgs", containerPath = "/var/www/MISP/app/files/img/orgs/" },
+      #        { sourceVolume = "misp_img_custom", containerPath = "/var/www/MISP/app/files/img/custom/" },
+      #        { sourceVolume = "misp_gnupg", containerPath = "/var/www/MISP/.gnupg/" }
+      #      ],
       mountPoints = [
         { sourceVolume = "misp_logs", containerPath = "misp_logs" },
         { sourceVolume = "misp_certs", containerPath = "mimsp_certs" },
@@ -133,13 +133,13 @@ resource "aws_ecs_task_definition" "task_definition" {
       ],
       portMappings = [
         { name = "phhmisp-80-tcp", containerPort = 80, hostPort = 80, protocol = "tcp", appProtocol = "http" },
-        { name = "phhmisp-8080-tcp", containerPort = 8080, hostPort = 8080, protocol = "tcp", appProtocol = "http"},
+        { name = "phhmisp-8080-tcp", containerPort = 8080, hostPort = 8080, protocol = "tcp", appProtocol = "http" },
         { name = "phhmisp-50000-tcp", containerPort = 50000, hostPort = 50000, protocol = "tcp", appProtocol = "http" }
       ]
     }
-#      ],
-#      capDrop = ["NET_RAW", "SYS_CHROOT", "MKNOD", "AUDIT_WRITE", "SETFCAP"]
-#    }
+    #      ],
+    #      capDrop = ["NET_RAW", "SYS_CHROOT", "MKNOD", "AUDIT_WRITE", "SETFCAP"]
+    #    }
   ])
   volume {
     name = "mysql_data"
