@@ -112,7 +112,7 @@ resource "aws_iam_role_policy_attachment" "github_role_mgmt_policy_attachment" {
 # Now attach a policy to S3 so that the github actions can update the state files.
 #
 resource "aws_iam_policy" "statef_bucket_policy" {
-  name        = "statef-bucket-policy"
+  name        = "github-statef-bucket-policy"
   path        = "/"
   description = "Allow "
 
@@ -154,7 +154,7 @@ resource "aws_iam_role_policy_attachment" "statef_bucket_policy" {
 # Now add the policy that will allow the github user to access ecr, ecs, alb and efs
 #
 resource "aws_iam_policy" "fargate_policy" {
-  name        = "fargate-policy"
+  name        = "github-fargate-policy"
   path        = "/"
   description = "Allow management of efs, ecs, ecr and alb"
   policy      = file("fargate_policy.json")
@@ -164,5 +164,22 @@ resource "aws_iam_policy" "fargate_policy" {
 resource "aws_iam_role_policy_attachment" "fargate_policy" {
   role       = aws_iam_role.github_role.name
   policy_arn = aws_iam_policy.fargate_policy.arn
+}
+
+#
+# Now add the policy that will allow the github user to add VPC infrastructure
+#
+resource "aws_iam_policy" "vpc_policy" {
+  name        = "github-vpc-policy"
+  path        = "/"
+  description = "Allow management of efs, ecs, ecr and alb"
+  policy      = file("vpc_policy.json")
+}
+
+# Attach the necessary policy to the role
+#
+resource "aws_iam_role_policy_attachment" "vpc_policy" {
+  role       = aws_iam_role.github_role.name
+  policy_arn = aws_iam_policy.vpc_policy.arn
 }
 
