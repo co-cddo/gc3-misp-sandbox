@@ -129,18 +129,22 @@ data "aws_iam_policy_document" "ecr_access_permission_policy" {
 }
 
 resource "aws_ecr_repository_policy" "repo_mariadb" {
+  depends_on = [aws_ecr_repository.mariadb]
   repository = "mariadb"
   policy     = data.aws_iam_policy_document.ecr_access_permission_policy.json
 }
 resource "aws_ecr_repository_policy" "repo_redis" {
+  depends_on = [aws_ecr_repository.redis]
   repository = "redis"
   policy     = data.aws_iam_policy_document.ecr_access_permission_policy.json
 }
 resource "aws_ecr_repository_policy" "repo_phh-misp" {
+  depends_on = [aws_ecr_repository.misp]
   repository = "misp"
   policy     = data.aws_iam_policy_document.ecr_access_permission_policy.json
 }
 resource "aws_ecr_repository_policy" "repo_phh-misp-modules" {
+  depends_on = [aws_ecr_repository.misp-modules]
   repository = "misp-modules"
   policy     = data.aws_iam_policy_document.ecr_access_permission_policy.json
 }
