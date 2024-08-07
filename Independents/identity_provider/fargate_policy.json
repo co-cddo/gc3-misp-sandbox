@@ -4,98 +4,28 @@
         {
             "Effect": "Allow",
             "Action": [
-                "elasticfilesystem:CreateFileSystem",
-                "elasticfilesystem:DeleteFileSystem",
-                "elasticfilesystem:DescribeFileSystems",
-                "elasticfilesystem:CreateMountTarget",
-                "elasticfilesystem:DeleteMountTarget",
-                "elasticfilesystem:DescribeMountTargets",
-                "elasticfilesystem:CreateTags",
-                "elasticfilesystem:DeleteTags",
-                "elasticfilesystem:TagResource",
-                "elasticfilesystem:UntagResource",
-                "elasticfilesystem:PutLifecycleConfiguration",
-                "elasticfilesystem:DescribeLifecycleConfiguration"
+                "elasticfilesystem:*"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "ecs:CreateCluster",
-                "ecs:DeleteCluster",
-                "ecs:DescribeClusters",
-                "ecs:RegisterTaskDefinition",
-                "ecs:DeregisterTaskDefinition",
-                "ecs:DescribeTaskDefinition",
-                "ecs:CreateService",
-                "ecs:DeleteService",
-                "ecs:UpdateService",
-                "ecs:DescribeServices",
-                "ecs:RunTask",
-                "ecs:StopTask",
-                "ecs:DescribeTasks",
-                "ecs:ListTasks",
-                "ecs:ListServices",
-                "ecs:ListClusters",
-                "ecs:TagResource",
-                "ecs:UntagResource",
-                "ecs:PutClusterCapacityProviders"
+                "ecs:*"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "ecr:CreateRepository",
-                "ecr:DeleteRepository",
-                "ecr:DescribeRepositories",
-                "ecr:GetRepositoryPolicy",
-                "ecr:SetRepositoryPolicy",
-                "ecr:DeleteRepositoryPolicy",
-                "ecr:ListImages",
-                "ecr:DescribeImages",
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:BatchDeleteImage",
-                "ecr:BatchGetImage",
-                "ecr:PutImage",
-                "ecr:InitiateLayerUpload",
-                "ecr:UploadLayerPart",
-                "ecr:CompleteLayerUpload",
-                "ecr:DescribeImageScanFindings",
-                "ecr:StartImageScan",
-                "ecr:StartLifecyclePolicyPreview",
-                "ecr:GetLifecyclePolicy",
-                "ecr:PutLifecyclePolicy",
-                "ecr:DeleteLifecyclePolicy",
-                "ecr:TagResource",
-                "ecr:UntagResource"
+                "ecr:*"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "elasticloadbalancing:CreateLoadBalancer",
-                "elasticloadbalancing:DeleteLoadBalancer",
-                "elasticloadbalancing:DescribeLoadBalancers",
-                "elasticloadbalancing:CreateTargetGroup",
-                "elasticloadbalancing:DeleteTargetGroup",
-                "elasticloadbalancing:DescribeTargetGroups",
-                "elasticloadbalancing:RegisterTargets",
-                "elasticloadbalancing:DeregisterTargets",
-                "elasticloadbalancing:DescribeTargetHealth",
-                "elasticloadbalancing:DescribeListeners",
-                "elasticloadbalancing:CreateListener",
-                "elasticloadbalancing:DeleteListener",
-                "elasticloadbalancing:DescribeRules",
-                "elasticloadbalancing:CreateRule",
-                "elasticloadbalancing:DeleteRule",
-                "elasticloadbalancing:ModifyListener",
-                "elasticloadbalancing:ModifyTargetGroup",
-                "elasticloadbalancing:DescribeTags",
-                "elasticloadbalancing:AddTags",
-                "elasticloadbalancing:RemoveTags"
+                "elasticloadbalancing:*"
             ],
             "Resource": "*"
         },
