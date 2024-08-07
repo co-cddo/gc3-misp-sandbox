@@ -68,7 +68,8 @@ resource "aws_ecr_repository" "redis" {
   image_scanning_configuration {
     scan_on_push = true
   }
-}resource "aws_ecr_repository" "mariadb" {
+}
+resource "aws_ecr_repository" "mariadb" {
   name                 = "mariadb"
   image_scanning_configuration {
     scan_on_push = true
