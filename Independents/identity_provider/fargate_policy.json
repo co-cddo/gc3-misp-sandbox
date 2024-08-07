@@ -97,6 +97,13 @@
                 "elasticloadbalancing:RemoveTags"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:*"
+            ],
+            "Resource": "*"
         }
     ]
 }
