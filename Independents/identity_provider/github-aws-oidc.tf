@@ -142,3 +142,19 @@ resource "aws_iam_role_policy_attachment" "statef_bucket_policy" {
   policy_arn = aws_iam_policy.statef_bucket_policy.arn
 }
 
+#
+# Now add the policy that will allow the github user to access ecr, ecs, alb and efs
+#
+resource "aws_iam_policy" "fargate_policy" {
+  name        = "fargate-policy"
+  path        = "/"
+  description = "Allow management of efs, ecs, ecr and alb"
+  policy      = file("fargate_policy.json")
+}
+
+# Attach the necessary policy to the role
+resource "aws_iam_role_policy_attachment" "fargate_policy" {
+  role       = aws_iam_role.github_role.name
+  policy_arn = aws_iam_policy.fargate_policy.arn
+}
+
