@@ -39,7 +39,8 @@
                 "ecs:ListServices",
                 "ecs:ListClusters",
                 "ecs:TagResource",
-                "ecs:UntagResource"
+                "ecs:UntagResource",
+                "ecs:PutClusterCapacityProviders"
             ],
             "Resource": "*"
         },
