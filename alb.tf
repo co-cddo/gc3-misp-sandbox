@@ -111,7 +111,7 @@ resource "aws_lb_listener" "listener8080" {
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group80.arn
+    target_group_arn = aws_lb_target_group.target_group8080.arn
   }
 }
 
