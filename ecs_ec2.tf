@@ -12,14 +12,8 @@ resource "aws_ecs_task_definition" "task_definitionec2" {
   family                   = "ec2misp-family"
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
-  cpu                      = "1024"
-  memory                   = "3072"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
-  runtime_platform {
-    cpu_architecture        = "X86_64"
-    operating_system_family = "LINUX"
-  }
   container_definitions = jsonencode([
     {
       name      = "ec2mysql",
@@ -200,8 +194,7 @@ resource "aws_ecs_service" "ecs_serviceec2" {
   cluster             = aws_ecs_cluster.ecs_clusterec2.arn
   task_definition     = aws_ecs_task_definition.task_definitionec2.arn
   launch_type         = "EC2"
-  scheduling_strategy = "REPLICA"
-  desired_count       = 0 # the number of tasks you wish to run
+  desired_count       = 1 # the number of tasks you wish to run
 
   network_configuration {
     subnets          = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_2.id]
