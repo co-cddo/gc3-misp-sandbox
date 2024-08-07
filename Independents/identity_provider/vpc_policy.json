@@ -36,7 +36,10 @@
                 "ec2:DeleteInternetGateway",
                 "ec2:DescribeInternetGateways",
                 "ec2:AttachInternetGateway",
-                "ec2:DetachInternetGateway"
+                "ec2:DetachInternetGateway",
+                "ecr:ListTagsForResource",
+                "ec2:DescribeAvailabilityZones",
+                "ssm:GetParameter"
             ],
             "Resource": "*"
         }
