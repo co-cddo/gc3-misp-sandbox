@@ -5,14 +5,9 @@
             "Effect": "Allow",
             "Action": [
                 "ec2:*",
-                "servicediscovery:CreatePrivateDnsNamespac",
-                "iam:TagRole",
-                "iam:CreatePolicy",
-                "servicediscovery:CreateHttpNamespace",
-                "servicediscovery:CreatePrivateDnsNamespace",
-                "iam:TagPolicy",
-                "servicediscovery:TagResource",
-                "ssm:GetParameter"
+                "servicediscovery:*",
+                "iam:*",
+                "ssm:*"
             ],
             "Resource": "*"
         }
