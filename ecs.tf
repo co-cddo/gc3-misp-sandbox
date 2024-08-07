@@ -215,28 +215,25 @@ resource "aws_ecs_service" "ecs_service" {
     container_name   = "misp"
     container_port   = 80
   }
-  depends_on = [aws_lb_listener.listener80]
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group8080.arn #the target group defined in the alb file
     container_name   = "misp"
     container_port   = 8080
   }
-  depends_on = [aws_lb_listener.listener8080]
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group443.arn #the target group defined in the alb file
     container_name   = "misp"
     container_port   = 443
   }
-  depends_on = [aws_lb_listener.listener443]
 
   load_balancer {
     target_group_arn = aws_lb_target_group.target_group50.arn #the target group defined in the alb file
     container_name   = "misp"
     container_port   = 50000
   }
-  depends_on = [aws_lb_listener.listener50]
+  depends_on = [aws_lb_listener.listener80, aws_lb_listener.listener443, aws_lb_listener.listener8080, aws_lb_listener.listener50]
 
   service_registries {
     registry_arn = aws_service_discovery_service.phhmisp.arn
