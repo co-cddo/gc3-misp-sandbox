@@ -4,9 +4,9 @@ variable "region" {
 }
 
  variable "environment" {
-   description = "dev/test/prod etc"
+   description = "sandbox/dev/test/prod etc"
    type        = string
-   default     = "dev"
+   default     = "sandbox"
 }
 
 variable "vpc_cidr" {
