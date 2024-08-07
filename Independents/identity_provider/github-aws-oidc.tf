@@ -132,6 +132,14 @@ resource "aws_iam_policy" "statef_bucket_policy" {
           "arn:aws:s3:::*/*",
           "arn:aws:s3:::gccc-misp-sandbox-tfstate"
         ]
+      },
+      {
+        "Sid" : "dynamodb0",
+        "Effect" : "Allow",
+        "Action" : [
+          "dynamodb:*"
+        ],
+        "Resource" : "*"
       }
     ]
   })
