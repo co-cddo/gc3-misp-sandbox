@@ -52,12 +52,12 @@ resource "aws_alb" "application_load_balancer443" {
 resource "aws_lb_target_group" "target_group443" {
   name        = "phhmisp-tg443"
   port        = "443"
-  protocol    = "HTTP"
+  protocol    = "HTTPS"
   target_type = "ip"
   vpc_id      = aws_vpc.vpc.id
   health_check {
     path                = "/"
-    protocol            = "HTTP"
+    protocol            = "HTTPS"
     matcher             = "200"
     port                = "traffic-port"
     healthy_threshold   = 2
@@ -70,7 +70,7 @@ resource "aws_lb_target_group" "target_group443" {
 resource "aws_lb_listener" "listener443" {
   load_balancer_arn = aws_alb.application_load_balancer443.arn
   port              = "443"
-  protocol          = "HTTP"
+  protocol          = "HTTPS"
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group443.arn
