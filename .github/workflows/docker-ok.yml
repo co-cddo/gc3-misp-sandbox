@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - 'docker-ok'
-
+env:
   BUCKET_NAME : "gccc-misp-sandbox-tfstate"
   AWS_REGION : "eu-west-2"
 
