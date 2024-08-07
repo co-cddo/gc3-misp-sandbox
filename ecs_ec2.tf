@@ -198,7 +198,7 @@ resource "aws_ecs_task_definition" "task_definitionec2" {
 resource "aws_ecs_service" "ecs_serviceec2" {
   name                = "ec2misp-ecs-service"
   cluster             = aws_ecs_cluster.ecs_clusterec2.arn
-  task_definition     = aws_ecs_task_definitionec2.task_definition.arn
+  task_definition     = aws_ecs_task_definition.task_definitionec2.arn
   launch_type         = "EC2"
   scheduling_strategy = "REPLICA"
   desired_count       = 0 # the number of tasks you wish to run
