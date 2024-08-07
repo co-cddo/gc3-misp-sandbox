@@ -5,6 +5,10 @@
             "Effect": "Allow",
             "Action": [
                 "ec2:*",
+                "servicediscovery:CreatePrivateDnsNamespac",
+                "iam:TagRole",
+                "iam:CreatePolicy",
+                "servicediscovery:CreateHttpNamespace",
                 "ssm:GetParameter"
             ],
             "Resource": "*"
